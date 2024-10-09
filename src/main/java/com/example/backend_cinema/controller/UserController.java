@@ -1,10 +1,8 @@
 package com.example.backend_cinema.controller;
 
 import com.example.backend_cinema.mysql.entity.UserEntity;
-import com.example.backend_cinema.request.AddUserRequest;
-import com.example.backend_cinema.request.LoginRequest;
-import com.example.backend_cinema.request.UpdatePasswordRequest;
-import com.example.backend_cinema.request.UpdateRoleRequest;
+import com.example.backend_cinema.request.*;
+import com.example.backend_cinema.response.ForgetPasswordResponse;
 import com.example.backend_cinema.response.TokenResponse;
 import com.example.backend_cinema.response.UserResponse;
 import com.example.backend_cinema.service.UserService;
@@ -61,7 +59,7 @@ public class UserController {
         );
     }
 
-    @PostMapping("update_role")
+    @PostMapping("/update_role")
     public ResponseEntity<CinemaResponse<String>> updateRole(@RequestBody UpdateRoleRequest request) throws Exception {
         return new ResponseEntity<>(
             new CinemaResponse<>(
@@ -69,5 +67,36 @@ public class UserController {
             ),
             HttpStatus.OK
         );
+    }
+
+    @PostMapping("/forget_password")
+    public ResponseEntity<CinemaResponse<ForgetPasswordResponse>> forgetPassword(@RequestBody ForgetPasswordRequest request) throws Exception {
+        ForgetPasswordResponse newPassword = service.forget(request.username);
+        return new ResponseEntity<>(
+                new CinemaResponse<>(newPassword),
+                HttpStatus.OK
+        );
+    }
+
+    @PostMapping("/detail") // Lấy thông tin chi tiết của member theo username
+    public ResponseEntity<CinemaResponse<UserEntity>> getMemberDetails(@RequestBody UsernameRequest request) throws Exception {
+        // Gọi phương thức getMemberDetails từ service và nhận lại kết quả
+        UserEntity member = service.getMemberDetails(request.username); // Giả định service trả về member
+        return new ResponseEntity<>(
+            new CinemaResponse<>(member),
+            HttpStatus.OK
+        );
+    }
+
+    @PostMapping("/update_user")
+    public ResponseEntity<CinemaResponse<String>> updateUser(@RequestBody AddUserRequest request) throws Exception {
+        boolean success = service.updateMember(request);
+        return new ResponseEntity<>(new CinemaResponse<>(success ? "SUCCESS" : "FAIL"), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{username}")
+    public ResponseEntity<CinemaResponse<String>> deleteUser(@RequestBody UsernameRequest request) throws Exception {
+        boolean success = service.deleteUser(request.username);
+        return new ResponseEntity<>(new CinemaResponse<>(success ? "SUCCESS" : "FAIL"), HttpStatus.OK);
     }
 }

@@ -44,4 +44,8 @@ public interface Constants {
         String ACTIVE = "ACTIVE";
         String INACTIVE = "INACTIVE";
     }
+
+    interface NewPassword {
+        String NEW_PASSWORD = "123456";
+    }
 }

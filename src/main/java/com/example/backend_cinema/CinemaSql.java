@@ -88,4 +88,33 @@ public class CinemaSql {
             .addValue("newPassword", newPassword);
         return new Pair<>(sql, map);
     }
+
+    public static Pair<String, MapSqlParameterSource> selectMemberByUsername(String username) {
+        String sql = "SELECT * FROM member WHERE username = :username";
+        MapSqlParameterSource map = new MapSqlParameterSource()
+            .addValue("username", username);
+        return new Pair<>(sql, map);
+    }
+
+    public static Pair<String, MapSqlParameterSource> updateMember(String username, String fullname, String address,
+                                                                 String phone, String birthday, String email, String image) {
+        String sql = "UPDATE member SET fullname = :fullname, address = :address, phone = :phone, " +
+            "birthday = :birthday, email = :email, image = :image WHERE username = :username";
+        MapSqlParameterSource map = new MapSqlParameterSource()
+            .addValue("username", username)
+            .addValue("fullname", fullname)
+            .addValue("address", address)
+            .addValue("phone", phone)
+            .addValue("birthday", birthday)
+            .addValue("email", email)
+            .addValue("image", image);
+        return new Pair<>(sql, map);
+    }
+
+    public static Pair<String, MapSqlParameterSource> deleteUser(String username) {
+        String sql = "DELETE FROM member WHERE username = :username";
+        MapSqlParameterSource map = new MapSqlParameterSource()
+            .addValue("username", username);
+        return new Pair<>(sql, map);
+    }
 }

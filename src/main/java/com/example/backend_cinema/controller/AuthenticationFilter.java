@@ -29,7 +29,9 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         READ_ROLE.add("/dashboard/user/add");
         READ_ROLE.add("/dashboard/user/update_password");
         READ_ROLE.add("/dashboard/user/update_role");
-
+        READ_ROLE.add("/dashboard/user/forget_password");
+        READ_ROLE.add("/dashboard/user/detail");
+        READ_ROLE.add("/dashboard/user/update_user");
 
         WRITE_ROLE.addAll(READ_ROLE);
 
