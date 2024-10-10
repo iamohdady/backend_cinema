@@ -29,8 +29,38 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         READ_ROLE.add("/dashboard/user/add");
         READ_ROLE.add("/dashboard/user/update_password");
         READ_ROLE.add("/dashboard/user/update_role");
+        READ_ROLE.add("/dashboard/user/forget_password");
+        READ_ROLE.add("/dashboard/user/detail");
+        READ_ROLE.add("/dashboard/user/update_user");
+        READ_ROLE.add("/dashboard/user/delete");
+        READ_ROLE.add("/dashboard/user/count");
 
+        READ_ROLE.add("/dashboard/movie/add");
+        READ_ROLE.add("/dashboard/movie/list");
+        READ_ROLE.add("/dashboard/movie/detail");
+        READ_ROLE.add("/dashboard/movie/update_movie");
+        READ_ROLE.add("/dashboard/movie/delete");
+        READ_ROLE.add("/dashboard/movie/count");
+        READ_ROLE.add("/dashboard/movie/search");
+        READ_ROLE.add("/dashboard/movie/upcoming");
 
+        READ_ROLE.add("/dashboard/room/add");
+        READ_ROLE.add("/dashboard/room/list");
+        READ_ROLE.add("/dashboard/room/detail");
+        READ_ROLE.add("/dashboard/room/seats");
+        READ_ROLE.add("/dashboard/room/update_status");
+
+        READ_ROLE.add("/dashboard/daytime/add");
+        READ_ROLE.add("/dashboard/daytime/list");
+        READ_ROLE.add("/dashboard/daytime/update_daytime");
+        READ_ROLE.add("/dashboard/daytime/delete");
+
+        READ_ROLE.add("/dashboard/schedule/list");
+        READ_ROLE.add("/dashboard/schedule/addByDaytimeName");
+        READ_ROLE.add("/dashboard/schedule/updateByDaytimeName");
+
+        READ_ROLE.add("/dashboard/showtime/list");
+        READ_ROLE.add("/dashboard/showtime/add");
         WRITE_ROLE.addAll(READ_ROLE);
 
         ADMIN_ROLE.addAll(WRITE_ROLE);

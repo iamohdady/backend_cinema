@@ -5,14 +5,18 @@ import com.example.backend_cinema.mysql.MySqlConnector;
 import com.example.backend_cinema.mysql.entity.UserEntity;
 import com.example.backend_cinema.request.AddUserRequest;
 import com.example.backend_cinema.request.UpdatePasswordRequest;
+import com.example.backend_cinema.response.CountResponse;
+import com.example.backend_cinema.response.ForgetPasswordResponse;
 import com.example.backend_cinema.response.TokenResponse;
 import com.example.backend_cinema.response.UserResponse;
 import com.example.backend_cinema.utils.crypt.CryptUtils;
 import com.example.backend_cinema.utils.exception.BadRequestException;
 import com.example.backend_cinema.utils.model.Constants;
+import com.example.backend_cinema.utils.model.Pair;
 import com.example.backend_cinema.utils.token.Jwt;
 import io.jsonwebtoken.lang.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -80,7 +84,7 @@ public class UserService {
                     request.image
                 )
             );
-            return new UserResponse(success ? "SUCCESS" : "FAIL", request.password);
+            return new UserResponse(success ? "SUCCESS" : "FAIL", request.username, request.password);
         }
         throw new BadRequestException("username is empty");
     }
@@ -112,18 +116,55 @@ public class UserService {
         throw new BadRequestException("username or role is empty");
     }
 
-    public UserResponse forget(String username) throws Exception {
+    public ForgetPasswordResponse forget(String username) throws Exception {
         if (StringUtils.hasLength(username)) {
-            String newPassword = RandomPassword.generatePassword();
-            boolean success = oracle.updateOne(
-                CmsSql.resetUserPassword(
+            String newPassword = Constants.NewPassword.NEW_PASSWORD;
+            boolean success = mysql.updateOne(
+                CinemaSql.resetUserPassword(
                     username,
                     CryptUtils.base64Encode(CryptUtils.hashSha256(newPassword))
                 )
             );
-            return new UserResponse(success ? "SUCCESS" : "FAIL", newPassword);
+            return new ForgetPasswordResponse(success ? "SUCCESS" : "FAIL", newPassword);
         }
         throw new BadRequestException("username is empty");
+    }
+
+    public UserEntity getMemberDetails(String username) throws Exception {
+        if (StringUtils.hasLength(username)) {
+            return mysql.selectOne(CinemaSql.selectMemberByUsername(username), UserEntity.class);
+        }
+        throw new BadRequestException("Username is empty");
+    }
+
+    public boolean updateMember(AddUserRequest request) throws Exception {
+        if (StringUtils.hasLength(request.username)) {
+            boolean success = mysql.updateOne(CinemaSql.updateMember(
+                request.username,
+                request.fullname,
+                request.address,
+                request.phone,
+                request.birthday,
+                request.email,
+                request.image
+            ));
+            return success; // Trả về kết quả
+        }
+        throw new BadRequestException("Username is empty");
+    }
+
+    public boolean deleteUser(String username) throws Exception {
+        if (StringUtils.hasLength(username)) {
+            boolean success = mysql.deleteOne(CinemaSql.deleteUser(username));
+            return success;
+        }
+        throw new BadRequestException("Username is empty");
+    }
+
+    public CountResponse countMember() throws Exception {
+        Pair<String, MapSqlParameterSource> sqlPair = CinemaSql.countMember();
+        Integer count = mysql.count(sqlPair);
+        return new CountResponse(count != null ? count : 0);
     }
 
     public boolean updateUserPasswordFirstTime(UpdatePasswordRequest request) throws Exception {

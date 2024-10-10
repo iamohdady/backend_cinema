@@ -96,5 +96,19 @@ public class MySqlConnector {
             return false;
         }
     }
+
+    public Integer count(Pair<String, MapSqlParameterSource> pair) {
+        try {
+            Integer count = template.queryForObject(pair.key, pair.value, Integer.class);
+            logger.debug("#deleteOne: sql=" + pair.key + ", param=" + pair.value + ", result=" + count);
+            return count;
+        } catch (Exception e) {
+            logger.error("#deleteOne: sql=" + pair.key + ", param=" + pair.value + ", error=" + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
 }
 
