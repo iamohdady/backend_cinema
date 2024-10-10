@@ -96,5 +96,28 @@ public class MySqlConnector {
             return false;
         }
     }
+
+    public Integer count(Pair<String, MapSqlParameterSource> pair) {
+        try {
+            Integer count = template.queryForObject(pair.key, pair.value, Integer.class);
+            logger.debug("#deleteOne: sql=" + pair.key + ", param=" + pair.value + ", result=" + count);
+            return count;
+        } catch (Exception e) {
+            logger.error("#deleteOne: sql=" + pair.key + ", param=" + pair.value + ", error=" + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public int insertAndGetId(Pair<String, MapSqlParameterSource> pair) {
+        try {
+            return template.queryForObject(pair.key, pair.value, Integer.class);
+        } catch (Exception e) {
+            logger.error("#insertAndGetId: sql=" + pair.key + ", param=" + pair.value + ", error=" + e.getMessage());
+            e.printStackTrace();
+            return -1; // Trả về -1 hoặc giá trị nào đó để biểu thị lỗi
+        }
+    }
+
 }
 

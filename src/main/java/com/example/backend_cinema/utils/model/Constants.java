@@ -44,4 +44,23 @@ public interface Constants {
         String ACTIVE = "ACTIVE";
         String INACTIVE = "INACTIVE";
     }
+
+    interface NewPassword {
+        String NEW_PASSWORD = "123456";
+    }
+
+    interface rateRoom {
+        String NORMAL = "NORMAL";
+        String VIP = "VIP";
+    }
+
+    interface statusRoom {
+        String TRUE = "TRUE";
+        String FALSE = "FALSE";
+    }
+
+    interface statusSeat {
+        String TRUE = "TRUE";
+        String FALSE = "FALSE";
+    }
 }
